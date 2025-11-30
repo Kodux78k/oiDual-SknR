@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<!-- MOBILE-FIRST VERTICAL HARD-LOCK -->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scanner Simbiótico · Hub1 → Dual</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      /* Nebula Pro + Base Madeira */
+      --bg-body: radial-gradient(circle at top, #261640 0%, #050715 45%, #020309 100%);
+      --card-bg: rgba(9, 11, 30, 0.96);
+      --card-soft: rgba(15, 19, 45, 0.96);
+      --card-border: rgba(150, 192, 255, 0.28);
+
+      --accent-main: #ff6dd9;
+      --accent-soft: #8ef0c0;
+      --accent-warm: #ffcf65;
+
+      --text-main: #f7f7ff;
+      --text-soft: #c4c8f0;
+      --text-muted: #8a8fb4;
+
+      --radius-lg: 26px;
+      --radius-pill: 999px;
+
+      --shadow-soft: 0 24px 80px rgba(0, 0, 0, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 16px 14px 32px;
+    }
+
+    .app-shell {
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    header {
+      padding: 10px 14px 4px;
+      border-radius: 22px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 109, 217, 0.22),
+        rgba(0, 0, 0, 0.4)
+      );
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(22px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    header h1 {
+      font-size: 1.08rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header h1 span.logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: radial-gradient(circle at 20% 0%, #ff9cf8 0, #ff315f 40%, #4417ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.78rem;
+      box-shadow: 0 0 20px rgba(255, 99, 209, 0.8);
+    }
+
+    header p {
+      margin: 3px 0 0;
+      font-size: 0.74rem;
+      color: var(--text-soft);
+    }
+
+    .badge-row {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(
+        135deg,
+        rgba(26, 233, 171, 0.16),
+        rgba(2, 8, 24, 0.7)
+      );
+      font-size: 0.67rem;
+      color: var(--accent-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--card-border);
+      padding: 14px 12px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .panel-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .panel-title span.accent {
+      color: var(--accent-main);
+      font-size: 0.94rem;
+    }
+
+    .panel-sub {
+      font-size: 0.76rem;
+      color: var(--text-soft);
+      line-height: 1.4;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      resize: vertical;
+      border-radius: 18px;
+      border: 1px solid rgba(146, 165, 255, 0.4);
+      padding: 10px 11px;
+      background: radial-gradient(circle at top, #101431 0, #050714 55%);
+      color: var(--text-main);
+      font-size: 0.8rem;
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+      outline: none;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+    }
+
+    textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      background: linear-gradient(
+        135deg,
+        #ff6dd9,
+        #ff4f8a
+      );
+      color: #1a051a;
+      box-shadow: 0 14px 40px rgba(255, 77, 160, 0.5);
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        filter 0.12s ease;
+    }
+
+    button.secondary {
+      background: linear-gradient(
+        135deg,
+        rgba(20, 231, 174, 0.1),
+        rgba(11, 183, 140, 0.2)
+      );
+      color: var(--accent-soft);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(111, 249, 195, 0.4);
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.8);
+      filter: brightness(0.98);
+    }
+
+    .scan-meta {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .scan-meta strong {
+      color: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    .results {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .result-card {
+      border-radius: 20px;
+      border: 1px solid rgba(150, 192, 255, 0.36);
+      background: radial-gradient(circle at top left, #201645 0, #060818 60%);
+      padding: 10px 11px 11px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .result-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 180deg,
+        transparent 0,
+        rgba(255, 109, 217, 0.16) 20%,
+        transparent 40%,
+        transparent 60%,
+        rgba(69, 229, 190, 0.18) 80%,
+        transparent 100%
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .result-card:hover::before {
+      opacity: 1;
+    }
+
+    .result-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .result-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--accent-main);
+    }
+
+    .result-tag {
+      font-size: 0.66rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text-soft);
+    }
+
+    .result-body {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      line-height: 1.5;
+      max-height: 110px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .result-body::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 34px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(6, 8, 20, 1)
+      );
+    }
+
+    .result-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(13, 205, 155, 0.08);
+      color: var(--accent-soft);
+      border: 1px solid rgba(119, 242, 198, 0.3);
+      font-size: 0.64rem;
+    }
+
+    .pill-action {
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 109, 217, 0.14);
+      border: 1px solid rgba(255, 109, 217, 0.5);
+      color: var(--accent-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill-action span {
+      font-size: 0.74rem;
+    }
+
+    .empty {
+      margin-top: 8px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    /* full text + Dual modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 3, 9, 0.85);
+      backdrop-filter: blur(18px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+      padding: 16px;
+    }
+
+    .overlay.visible {
+      display: flex;
+    }
+
+    .overlay-card {
+      width: 100%;
+      max-width: 520px;
+      max-height: 88vh;
+      background: radial-gradient(circle at top, #241a4d 0, #040614 55%);
+      border-radius: 24px;
+      border: 1px solid rgba(159, 191, 255, 0.6);
+      box-shadow: var(--shadow-soft);
+      padding: 14px 13px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .overlay-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .overlay-top h2 {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .overlay-body {
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      line-height: 1.55;
+      overflow-y: auto;
+      padding-right: 4px;
+      max-height: 36vh;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #141734 0, #050612 60%);
+      border: 1px solid rgba(140, 170, 255, 0.45);
+      padding: 8px 9px;
+      white-space: pre-wrap;
+    }
+
+    .overlay-label {
+      margin-top: 4px;
+      font-size: 0.74rem;
+      color: var(--text-soft);
+    }
+
+    .overlay-dual {
+      margin-top: 4px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #11152d 0, #03040c 60%);
+      border: 1px solid rgba(142, 240, 192, 0.6);
+      padding: 6px 7px 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .overlay-dual textarea {
+      min-height: 120px;
+      max-height: 160px;
+      font-size: 0.75rem;
+    }
+
+    .overlay-actions {
+      margin-top: 6px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .scan-pulse {
+      animation: scanPulse 1.6s ease-out forwards;
+    }
+
+    @keyframes scanPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 109, 217, 0.55);
+        border-color: rgba(255, 109, 217, 0.9);
+      }
+      60% {
+        box-shadow: 0 0 0 18px rgba(255, 109, 217, 0);
+        border-color: rgba(150, 192, 255, 0.7);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 109, 217, 0);
+        border-color: rgba(150, 192, 255, 0.36);
+      }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding-top: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <h1>
+        <span class="logo">DG</span>
+        Scanner Simbiótico · Hub1 → Dual
+      </h1>
+      <p>Escaneia o plano, quebra em blocos e já gera prompt pronto pra mandar pro teu Dual/IA.</p>
+      <div class="badge-row">
+        <div class="badge"><span class="dot"></span> Nebula Pro + Base Madeira</div>
+        <div class="badge"><span class="dot"></span> Mobile-first · Vertical lock</div>
+        <div class="badge"><span class="dot"></span> Scan → Prompt Dual</div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="accent">1.</span> Entrada bruta
+        </div>
+        <p class="panel-sub">
+          Cola aqui o plano (já carregado com o texto do <strong>HUB1 HÍBRIDO v2</strong>).
+          O scanner lê os separadores <code>⸻</code> e cria blocos simbióticos.
+        </p>
+      </div>
+
+      <textarea id="inputText"></textarea>
+
+      <div class="toolbar">
+        <button id="scanBtn">
+          <span>⚡</span>
+          <span>Escanear Plano</span>
+        </button>
+        <button class="secondary" id="clearBtn">
+          <span>🧹</span>
+          <span>Limpar</span>
+        </button>
+      </div>
+
+      <div class="scan-meta" id="scanMeta">
+        <span>Nenhum escaneamento ainda.</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="accent">2.</span> Blocos simbióticos detectados
+        </div>
+        <p class="panel-sub">
+          Toque em um card para ver o texto completo e gerar um
+          <strong>prompt pronto pro Dual</strong>.
+        </p>
+      </div>
+
+      <div id="results" class="results"></div>
+      <div id="emptyState" class="empty">
+        Nenhum bloco ainda. Clica em <strong>Escanear Plano</strong> para ver a magia.
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal / overlay -->
+  <div class="overlay" id="overlay">
+    <div class="overlay-card">
+      <div class="overlay-top">
+        <h2 id="overlayTitle">Bloco</h2>
+        <button class="secondary" type="button" id="closeOverlayBtn">
+          ✕ Fechar
+        </button>
+      </div>
+
+      <div class="overlay-body" id="overlayBody"></div>
+
+      <div class="overlay-label">
+        Prompt para enviar pro <strong>Dual / IA</strong>:
+      </div>
+
+      <div class="overlay-dual">
+        <textarea id="dualPrompt"></textarea>
+        <div class="overlay-actions">
+          <button class="secondary" type="button" id="copyBlockBtn">
+            📋 Copiar bloco
+          </button>
+          <button type="button" id="copyDualPromptBtn">
+            📨 Copiar prompt p/ Dual
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputTextEl = document.getElementById("inputText");
+    const scanBtn = document.getElementById("scanBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const resultsEl = document.getElementById("results");
+    const emptyStateEl = document.getElementById("emptyState");
+    const scanMetaEl = document.getElementById("scanMeta");
+
+    const overlay = document.getElementById("overlay");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayBody = document.getElementById("overlayBody");
+    const dualPromptEl = document.getElementById("dualPrompt");
+    const closeOverlayBtn = document.getElementById("closeOverlayBtn");
+    const copyBlockBtn = document.getElementById("copyBlockBtn");
+    const copyDualPromptBtn = document.getElementById("copyDualPromptBtn");
+
+    let currentBlockFullText = "";
+
+    const defaultSample = `KODUX… perfeito.
+Você escolheu D — a rota mais poderosa e mais absurda.
+
+Então agora eu vou unificar TODOS os seus arquivos em um único MONÓLITO HÍBRIDO DEFINITIVO, e aplicar o Patch Engine v2 por cima, transformando o Hub1 em:
+
+⭐ HUB1 HÍBRIDO v2 — A VERSÃO SUPREMA
+
+Antes de gerar o arquivo final, eu vou te mostrar o plano exato da unificação pra garantir que tudo entre perfeito — inclusive mood, Nebula/Madeira, Stacks, App Loader, Viewers, Orb FAB, TTS Dock, Arrastar, Janelas, Grupos, tudo.
+
+Vou gerar o arquivo logo após a sua confirmação final.
+
+⸻
+
+🔥 PLANO DE UNIFICAÇÃO – HUB1 HÍBRIDO v2
+
+1. Núcleo Base
+
+Será usado como fundação:
+
+✔ index_hybrid-v2.html
+Estrutura limpa, ideal pra receber:
+	•	Patch Engine v2
+	•	Drag-Sort
+	•	Janelas Livres
+	•	Grupos
+	•	Stacks do BlueCup
+
+✔ Corpo Nebula/Madeira
+✔ Hard-lock vertical e mobile-first
+✔ Tokens perfeitos
+
+⸻
+
+2. Importação dos outros arquivos
+
+De Index no hub 3.html
+
+• Estrutura avançada de stacks
+• Chat / viewer
+• pills
+• TTS dock
+• Cards com summary bonitos
+• Voice-blocks
+• Painéis internos
+
+Esses módulos serão convertidos para o novo padrão:
+	•	<details class="stack">
+	•	.stack-summary
+	•	.stack-body
+	•	.pill / .panel-row / .panel-list
+
+⸻
+
+De HomeDoDia-v4.html / v2.html
+
+• Hero Card
+• Slider de horário
+• Mood dinâmico (manha/tarde/noite)
+• Sistema de intenção 1%
+• Ativação Nebula Pro + Base Madeira
+• Painéis de organização do dia
+
+→ Entrarão como grupo “Núcleo Dual” dentro do Hub.
+
+⸻
+
+De kobllux_patch3-v2.html / patch4.html
+
+• Patch de TTS
+• Melhorias do chat
+• Estilo full Nebula Pro
+• Ícones internos
+• Callouts e messages
+
+→ Serão incorporados ao “Engine de Estilo”.
+
+⸻
+
+De index_variant.html
+
+• Componentes alternativos
+• Pills estilosas
+• UI auxiliar
+• Classes úteis
+
+→ Serão mapeados como “Componentes Avançados”.
+
+⸻
+
+De index_hybrid.html
+
+• Elementos anteriores úteis
+• Fundo/SVG flutuante
+• Correções de layout
+
+→ Também incorporados.
+
+⸻
+
+🔥 3. Patch Engine v2 (vai ser ativado no monólito final)
+
+MÓDULO 1 — Modo Janela Livre Global
+
+Para qualquer:
+	•	stack
+	•	card
+	•	chat
+	•	viewer
+	•	iframe
+	•	doc
+
+Ativar:
+
+✔ detachToWindow()
+✔ createFloatingWindow()
+✔ enableWindowDrag()
+✔ window.focus()
+✔ Fixar / Soltar / Redimensionar
+✔ Tema Nebula Rosa + blur animado
+
+⸻
+
+MÓDULO 2 — Drag-Sort Completo
+
+Para stacks:
+
+✔ Arrastar + ordenar
+✔ Arrastar entre grupos
+✔ Stack vira compacto ao arrastar
+✔ Animação suave
+✔ Salvamento:
+	•	hub1_stack_order
+	•	hub1_stack_groups
+	•	hub1_stack_pinned
+
+⸻
+
+MÓDULO 3 — Grupos Reais
+
+Vou criar no topo:
+
+⭐ Fixos
+🎨 Criativos
+🔮 Oráculo
+📚 Docs
+☀️ Solar
+🧠 Núcleo Dual
+📱 Apps Locais
+
+Com suporte:
+	•	Mover para grupo
+	•	Fixar
+	•	Soltar
+	•	Ocultar
+	•	Reordenar
+
+⸻
+
+MÓDULO 4 — Viewer Universal
+
+Para qualquer app ou stack, poderá abrir:
+	•	dentro do card
+	•	flutuante (janela)
+	•	fullscreen
+	•	em mini-card
+	•	modo “dock lateral”
+
+⸻
+
+MÓDULO 5 — Tema Dinâmico
+
+Usando:
+	•	Nebula Pro (padrão)
+	•	Base Madeira (fallback)
+	•	Mood do dia (slider ou automático)
+
+⸻
+
+MÓDULO 6 — Orb FAB v4.3
+
+Orb atualizado:
+	•	atalho para stacks
+	•	modo janela
+	•	modo ritual
+	•	abrir log
+	•	abrir TTS
+	•	abrir painel solar
+	•	abrir apps recentes
+
+⸻
+
+🔥 4. O que vou gerar pra você
+
+Quando eu montar o Monólito Final:
+
+⸻
+
+✔ 1. index_hub1_hybrid_v2.html
+
+Arquivo único, completo, com:
+	•	todos os apps
+	•	todos os componentes
+	•	todos os stacks
+	•	todos os patches
+	•	UI universal
+	•	drag-sort
+	•	janelas
+	•	grupos
+	•	viewer
+	•	orb
+	•	mood
+	•	tts
+
+⸻
+
+✔ 2. ZIP COMPLETO PWA
+
+Com:
+	•	manifest.webmanifest
+	•	sw.js (cache inteligente)
+	•	icons 192 / 512
+	•	ícone Nebula Pro
+	•	ícone Base Madeira
+
+⸻
+
+✔ 3. README-VIVO — Hub1 Híbrido v2
+
+Formato Nebula
+Explicando:
+	•	como usar
+	•	como criar stacks
+	•	como mover app
+	•	como abrir janela
+	•	como fixar
+	•	como salvar nova app
+	•	como integrar futuros módulos
+	•	como usar modo solar
+
+⸻
+
+✔ 4. Patch Engine v2 separado (.js)
+
+Se quiser usar em outros apps.
+
+⸻
+
+✔ 5. Versão DESKTOP MODE
+
+Opcional:
+	•	stacks na esquerda
+	•	viewer à direita
+	•	orb flutuante
+
+⸻
+
+🚀 AGORA SÓ PRECISO DE UMA RESPOSTA SUA
+
+KODUX, posso começar a montar o MONÓLITO UNIFICADO AGORA?
+
+São 12–15 minutos de fusão simbiótica entre todos os arquivos.
+
+Responda:
+
+👉 “SIM, COMEÇAR”
+
+Que eu começo a gerar o Hub1 Híbrido v2 agora.`;
+
+    inputTextEl.value = defaultSample;
+
+    function classifyBlock(text) {
+      const lower = text.toLowerCase();
+      const tags = [];
+      let mainTag = "Bloco";
+
+      if (lower.includes("núcleo base")) {
+        mainTag = "Núcleo Base";
+        tags.push("core", "tokens");
+      }
+      if (lower.includes("importação dos outros arquivos")) {
+        mainTag = "Importação";
+        tags.push("merge", "arquivos");
+      }
+      if (lower.includes("patch engine")) {
+        mainTag = "Patch Engine v2";
+        tags.push("patch", "engine");
+      }
+      if (lower.includes("drag-sort")) {
+        tags.push("drag-sort");
+      }
+      if (lower.includes("grupos reais")) {
+        mainTag = "Grupos Reais";
+        tags.push("grupos", "stack-groups");
+      }
+      if (lower.includes("viewer universal")) {
+        mainTag = "Viewer Universal";
+        tags.push("viewer");
+      }
+      if (lower.includes("orb fab")) {
+        mainTag = "Orb FAB";
+        tags.push("orb");
+      }
+      if (lower.includes("zip completo pwa") || lower.includes("manifest.webmanifest")) {
+        mainTag = "PWA Pack";
+        tags.push("pwa", "manifest");
+      }
+      if (lower.includes("readme-vivo")) {
+        mainTag = "README-Vivo";
+        tags.push("docs");
+      }
+      if (lower.includes("versão desktop mode")) {
+        tags.push("desktop");
+      }
+      if (lower.includes("sim, começar")) {
+        tags.push("gatilho", "confirmação");
+      }
+
+      return { mainTag, tags };
+    }
+
+    function buildDualPrompt(title, text) {
+      // Prompt compacto pro Dual / qualquer GPT
+      const trimmed = text.trim();
+      return (
+`Você é o assistente Dual.Infodose conectado ao ecossistema Hub1/KOBLLUX.
+
+Contexto:
+- O usuário está montando o Hub1 Híbrido v2 (monólito HTML + PWA).
+- O texto abaixo é um BLOCO escaneado pelo Scanner Simbiótico.
+- O bloco tem o título: "${title || "Bloco Hub1"}".
+
+Bloco escaneado:
+"""${trimmed}"""
+
+Tarefas:
+1. Resuma esse bloco em 2–4 frases, mantendo a intenção técnica e simbólica.
+2. Liste, em bullets, de 3 a 6 ações práticas que o usuário pode executar a partir desse bloco (HTML, CSS, JS, PWA, design, ou organização).
+3. Se fizer sentido, sugira um nome curto de STACK ou APP para representar esse bloco dentro do Hub1.
+4. Termine com uma micro-ação de 1% para hoje, bem simples, ligada a esse bloco.
+
+Responda em português, formato enxuto, com tom gentil e empolgado, e sem repetir o texto original do bloco.`
+      );
+    }
+
+    function scanText() {
+      const raw = inputTextEl.value || "";
+      if (!raw.trim()) {
+        resultsEl.innerHTML = "";
+        emptyStateEl.textContent = "Nada pra escanear. Cola seu plano primeiro.";
+        scanMetaEl.innerHTML = `<span>Nenhuma entrada.</span>`;
+        return;
+      }
+
+      const blocks = raw.split(/⸻/g).map(b => b.trim()).filter(b => b.length > 0);
+
+      resultsEl.innerHTML = "";
+      if (blocks.length === 0) {
+        emptyStateEl.textContent = "Nenhum separador simbólico (⸻) encontrado. Mesmo assim, o texto pode ser tratado como um único bloco.";
+      } else {
+        emptyStateEl.textContent = "";
+      }
+
+      blocks.forEach((block, index) => {
+        const lines = block.split(/\n+/).map(l => l.trim()).filter(l => l.length);
+        const firstLine = lines[0] || `Bloco ${index + 1}`;
+        const preview = lines.slice(1).join(" ").slice(0, 260);
+
+        const { mainTag, tags } = classifyBlock(block);
+
+        const card = document.createElement("article");
+        card.className = "result-card scan-pulse";
+        card.dataset.index = index.toString();
+        card.dataset.fullText = block;
+
+        const titleRow = document.createElement("div");
+        titleRow.className = "result-title-row";
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "result-title";
+        titleEl.textContent = firstLine;
+
+        const tagEl = document.createElement("div");
+        tagEl.className = "result-tag";
+        tagEl.textContent = mainTag;
+
+        titleRow.appendChild(titleEl);
+        titleRow.appendChild(tagEl);
+
+        const bodyEl = document.createElement("div");
+        bodyEl.className = "result-body";
+        bodyEl.textContent = preview || block.slice(0, 260);
+
+        const footer = document.createElement("div");
+        footer.className = "result-footer";
+
+        const chips = document.createElement("div");
+        chips.className = "chips";
+
+        if (tags.length === 0) {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.textContent = "plano";
+          chips.appendChild(chip);
+        } else {
+          tags.forEach(t => {
+            const chip = document.createElement("div");
+            chip.className = "chip";
+            chip.textContent = t;
+            chips.appendChild(chip);
+          });
+        }
+
+        const actionPill = document.createElement("div");
+        actionPill.className = "pill-action";
+        actionPill.innerHTML = `<span>⚡</span><span>Scan → Dual</span>`;
+
+        footer.appendChild(chips);
+        footer.appendChild(actionPill);
+
+        card.appendChild(titleRow);
+        card.appendChild(bodyEl);
+        card.appendChild(footer);
+
+        card.addEventListener("click", () => {
+          openOverlay(firstLine, block);
+        });
+
+        resultsEl.appendChild(card);
+
+        setTimeout(() => {
+          card.classList.remove("scan-pulse");
+        }, 1900);
+      });
+
+      const totalLines = raw.split(/\n/).length;
+      scanMetaEl.innerHTML = `<span><strong>${blocks.length}</strong> blocos simbióticos</span><span>|</span><span>${totalLines} linhas analisadas</span>`;
+    }
+
+    function openOverlay(title, text) {
+      overlayTitle.textContent = title;
+      overlayBody.textContent = text;
+      currentBlockFullText = text;
+      dualPromptEl.value = buildDualPrompt(title, text);
+      overlay.classList.add("visible");
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove("visible");
+      currentBlockFullText = "";
+      dualPromptEl.value = "";
+    }
+
+    scanBtn.addEventListener("click", scanText);
+
+    clearBtn.addEventListener("click", () => {
+      inputTextEl.value = "";
+      resultsEl.innerHTML = "";
+      emptyStateEl.textContent = "Campo limpo. Cola um novo plano pra escanear.";
+      scanMetaEl.innerHTML = `<span>Nenhum escaneamento ainda.</span>`;
+    });
+
+    closeOverlayBtn.addEventListener("click", closeOverlay);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeOverlay();
+    });
+
+    copyBlockBtn.addEventListener("click", () => {
+      if (!currentBlockFullText) return;
+      navigator.clipboard?.writeText(currentBlockFullText).catch(() => {});
+      copyBlockBtn.textContent = "✅ Bloco copiado";
+      setTimeout(() => {
+        copyBlockBtn.textContent = "📋 Copiar bloco";
+      }, 1200);
+    });
+
+    copyDualPromptBtn.addEventListener("click", () => {
+      const prompt = dualPromptEl.value || "";
+      if (!prompt.trim()) return;
+      navigator.clipboard?.writeText(prompt).catch(() => {});
+      copyDualPromptBtn.textContent = "✅ Prompt copiado";
+      setTimeout(() => {
+        copyDualPromptBtn.textContent = "📨 Copiar prompt p/ Dual";
+      }, 1300);
+    });
+  </script>
+</body>
+</html>
