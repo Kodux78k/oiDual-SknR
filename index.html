@@ -1120,5 +1120,15 @@ Responda em português, formato enxuto, com tom gentil e empolgado, e sem repeti
   });
 })();
   </script>
+
+	<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .catch(err => console.log('SW fail:', err));
+    });
+  }
+</script>
 </body>
 </html>
