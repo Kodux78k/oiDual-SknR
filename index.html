@@ -500,7 +500,10 @@
         <div class="badge"><span class="dot"></span> Scan → Prompt Dual</div>
       </div>
     </header>
-
+<button class="chip-btn" type="button" id="btnThemeOverride">
+  <span class="icon">◎</span>
+  <span>Tema · Override</span>
+</button>
     <section class="panel">
       <div class="panel-header">
         <div class="panel-title">
@@ -1080,6 +1083,42 @@ Responda em português, formato enxuto, com tom gentil e empolgado, e sem repeti
         copyDualPromptBtn.textContent = "📨 Copiar prompt p/ Dual";
       }, 1300);
     });
+	  (function(){
+  const STORAGE_KEY = 'kobllux_var_preset_v1';
+  const root = document.documentElement;
+  const btn = document.getElementById('btnThemeOverride');
+
+  if(!btn) return;
+
+  const labelDefault = btn.innerHTML;
+
+  function setLabel(html){
+    btn.innerHTML = html;
+    setTimeout(() => {
+      btn.innerHTML = labelDefault;
+    }, 1400);
+  }
+
+  btn.addEventListener('click', () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(!saved){
+        setLabel('<span class="icon">…</span><span>Sem preset</span>');
+        return;
+      }
+
+      const preset = JSON.parse(saved);
+      Object.entries(preset).forEach(([k, v]) => {
+        root.style.setProperty(k, String(v).trim());
+      });
+
+      setLabel('<span class="icon">✔</span><span>Override OK</span>');
+    } catch (e){
+      console.warn('Erro ao aplicar preset de tema', e);
+      setLabel('<span class="icon">!</span><span>Erro</span>');
+    }
+  });
+})();
   </script>
 </body>
 </html>
