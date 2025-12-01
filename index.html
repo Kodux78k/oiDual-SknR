@@ -1125,7 +1125,7 @@ Responda em português, formato enxuto, com tom gentil e empolgado, e sem repeti
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker
-        .register('/sw.js')
+        .register('sw.js')
         .catch(err => console.log('SW fail:', err));
     });
   }
