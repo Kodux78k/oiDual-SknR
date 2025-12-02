@@ -1,11 +1,11 @@
 // sw.js · Service Worker basicão
 
-const CACHE_NAME = 'hub1-SknR-v1';
+const CACHE_NAME = 'hub1-SknR-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/icons/icon-192.png'
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icons/icon-192.png'
 ];
 
 // Instala e pré-cacheia os básicos
