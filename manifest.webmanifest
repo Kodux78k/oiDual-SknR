@@ -1,8 +1,8 @@
 {
   "name": "Hub1 Reel · Dual.Infodose",
   "short_name": "Hub1 Reel",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#050816",
